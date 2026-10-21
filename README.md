@@ -1,5 +1,3 @@
-# Sistemi-Digjital-per-Menaxhimin-e-Biblotekes-
-
 # Sistemi Digjital për Menaxhimin e Bibliotekës
 
 Projekt individual për lëndën **Projekt – Praktikë Profesionale**.
