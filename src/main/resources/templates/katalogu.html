@@ -30,6 +30,10 @@
     <main>
         <h2>Katalogu i librave</h2>
 
+        <p th:if="${bibliotekar}">
+            <a th:href="@{/librat/shto}">Shto libër</a>
+        </p>
+
         <p th:if="${#lists.isEmpty(librat)}">
             Aktualisht nuk ka libra në katalog.
         </p>

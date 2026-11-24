@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="sq" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shto libër</title>
+
+    <link rel="stylesheet" th:href="@{/css/katalogu.css}">
+    <script th:src="@{/js/shto-librin.js}" defer></script>
+    
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+</head>
+<body>
+
+    <header>
+        <h1>Biblioteka digjitale</h1>
+        <p>Menaxhimi i katalogut</p>
+    </header>
+
+    <main>
+        <h2>Shto një libër</h2>
+
+        <form
+            id="formulari-librit"
+            th:action="@{/api/librat}"
+            method="post">
+
+            <div>
+                <label for="titulli">Titulli</label>
+                <input
+                    type="text"
+                    id="titulli"
+                    name="titulli"
+                    maxlength="255"
+                    required>
+            </div>
+
+            <div>
+                <label for="permbledhja">Përmbledhja</label>
+                <textarea
+                    id="permbledhja"
+                    name="permbledhja"
+                    rows="5"
+                    maxlength="10000"></textarea>
+            </div>
+
+            <div>
+                <label for="gjuha">Gjuha</label>
+                <input
+                    type="text"
+                    id="gjuha"
+                    name="gjuha"
+                    maxlength="50"
+                    required>
+            </div>
+
+            <button type="submit" id="ruaj-librin" disabled>
+                Ruaj librin
+            </button>
+        </form>
+
+        <p id="mesazhi" role="status" aria-live="polite"></p>
+
+        <a th:href="@{/katalogu}">Kthehu te katalogu</a>
+    </main>
+
+</body>
+</html>

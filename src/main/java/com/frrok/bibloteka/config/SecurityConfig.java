@@ -68,6 +68,7 @@ public class SecurityConfig {
                         "/katalogu",
                         "/hyrja",
                         "/css/**",
+                        "/js/**",
                         "/api/librat",
                         "/api/librat/**",
                         "/api/csrf"
@@ -77,6 +78,9 @@ public class SecurityConfig {
                         "/api/librat",
                         "/api/librat/**"
                 ).hasRole("BIBLIOTEKAR")
+
+                .requestMatchers("/librat/**")
+                .hasRole("BIBLIOTEKAR")
 
                 .anyRequest().authenticated()
         );

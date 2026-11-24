@@ -1,5 +1,5 @@
 package com.frrok.bibloteka.controller;
-import java.security.Principal;
+import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,25 +17,42 @@ public class KatalogController {
     }
 
     @GetMapping({"/", "/katalogu"})
-    public String shfaqKatalogun(
-            Model model,
-            Principal principal
-    ) {
-        model.addAttribute(
-                "librat",
-                libriRepository.gjejTeGjithe()
-        );
+        public String shfaqKatalogun(
+                Model model,
+                Authentication authentication
+        ) {
+            model.addAttribute(
+                    "librat",
+                    libriRepository.gjejTeGjithe()
+            );
 
-        model.addAttribute(
-                "email",
-                principal == null ? null : principal.getName()
-        );
+            model.addAttribute(
+                    "email",
+                    authentication == null
+                            ? null
+                            : authentication.getName()
+            );
 
-        return "katalogu";
-    }
+            boolean bibliotekar = authentication != null
+                    && authentication.getAuthorities().stream()
+                            .anyMatch(autoritet ->
+                                    "ROLE_BIBLIOTEKAR".equals(
+                                            autoritet.getAuthority()
+                                    )
+                            );
+
+            model.addAttribute("bibliotekar", bibliotekar);
+
+            return "katalogu";
+        }
     
         @GetMapping("/hyrja")
         public String shfaqHyrjen() {
             return "hyrja";
+        }
+
+        @GetMapping("/librat/shto")
+        public String shfaqFormularinELibrit() {
+            return "shto-librin";
         }
 }
