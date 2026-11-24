@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="sq" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalogu i bibliotekës</title>
+    <link rel="stylesheet" th:href="@{/css/katalogu.css}">
+</head>
+<body>
+
+    <header>
+        <h1>Biblioteka digjitale</h1>
+        <p>Shfleto librat e bibliotekës.</p>
+    </header>
+
+    <main>
+        <h2>Katalogu i librave</h2>
+
+        <p th:if="${#lists.isEmpty(librat)}">
+            Aktualisht nuk ka libra në katalog.
+        </p>
+
+        <table th:unless="${#lists.isEmpty(librat)}">
+            <thead>
+                <tr>
+                    <th>Titulli</th>
+                    <th>Përmbledhja</th>
+                    <th>Gjuha</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="libri : ${librat}">
+                    <td th:text="${libri.titulli()}"></td>
+                    <td th:text="${libri.permbledhja()}"></td>
+                    <td th:text="${libri.gjuha()}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+</body>
+</html>

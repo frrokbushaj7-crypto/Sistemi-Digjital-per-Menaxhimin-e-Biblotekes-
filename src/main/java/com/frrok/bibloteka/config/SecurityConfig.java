@@ -70,6 +70,19 @@ public class SecurityConfig {
                         "/api/librat/**"
                 ).hasRole("BIBLIOTEKAR")
 
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/",
+                        "/katalogu"
+                ).permitAll()
+
+                .requestMatchers(
+                        HttpMethod.GET,
+                        "/",
+                        "/katalogu",
+                        "/css/**"
+                ).permitAll()
+
                 .anyRequest().authenticated()
         );
 
