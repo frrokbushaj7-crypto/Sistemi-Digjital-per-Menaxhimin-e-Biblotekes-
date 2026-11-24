@@ -33,14 +33,18 @@ public class SecurityConfig {
                     WHERE email = ?
                     """;
 
-            return jdbcTemplate.query(sql, (rs, rowNum) ->
-                    User.withUsername(rs.getString("email"))
-                            .password(rs.getString("fjalekalimi_hash"))
-                            .roles(rs.getString("roli"))
-                            .disabled(
-                                    !rs.getBoolean("email_verifikuar")
-                            )
-                            .build(),
+            return jdbcTemplate.query(
+                    sql,
+                    (rs, rowNum) ->
+                            User.withUsername(rs.getString("email"))
+                                    .password(
+                                            rs.getString("fjalekalimi_hash")
+                                    )
+                                    .roles(rs.getString("roli"))
+                                    .disabled(
+                                            !rs.getBoolean("email_verifikuar")
+                                    )
+                                    .build(),
                     email.strip()
             ).stream().findFirst().orElseThrow(
                     () -> new UsernameNotFoundException(
@@ -60,6 +64,10 @@ public class SecurityConfig {
 
                 .requestMatchers(
                         HttpMethod.GET,
+                        "/",
+                        "/katalogu",
+                        "/hyrja",
+                        "/css/**",
                         "/api/librat",
                         "/api/librat/**",
                         "/api/csrf"
@@ -70,23 +78,24 @@ public class SecurityConfig {
                         "/api/librat/**"
                 ).hasRole("BIBLIOTEKAR")
 
-                .requestMatchers(
-                        HttpMethod.GET,
-                        "/",
-                        "/katalogu"
-                ).permitAll()
-
-                .requestMatchers(
-                        HttpMethod.GET,
-                        "/",
-                        "/katalogu",
-                        "/css/**"
-                ).permitAll()
-
                 .anyRequest().authenticated()
         );
 
         http.httpBasic(Customizer.withDefaults());
+
+        http.formLogin(form -> form
+                .loginPage("/hyrja")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("/katalogu", true)
+                .failureUrl("/hyrja?error")
+                .permitAll()
+        );
+
+        http.logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/hyrja?logout")
+                .permitAll()
+        );
 
         return http.build();
     }

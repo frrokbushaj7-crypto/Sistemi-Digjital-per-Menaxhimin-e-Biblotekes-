@@ -11,6 +11,20 @@
     <header>
         <h1>Biblioteka digjitale</h1>
         <p>Shfleto librat e bibliotekës.</p>
+        <div th:if="${email != null}">
+        <p>
+            I kyçur si:
+            <strong th:text="${email}"></strong>
+        </p>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit">Dil</button>
+        </form>
+    </div>
+
+    <p th:if="${email == null}">
+        <a th:href="@{/hyrja}">Hyr në llogari</a>
+    </p>
     </header>
 
     <main>

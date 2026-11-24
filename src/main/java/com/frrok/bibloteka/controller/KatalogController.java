@@ -1,4 +1,5 @@
 package com.frrok.bibloteka.controller;
+import java.security.Principal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +17,25 @@ public class KatalogController {
     }
 
     @GetMapping({"/", "/katalogu"})
-    public String shfaqKatalogun(Model model) {
+    public String shfaqKatalogun(
+            Model model,
+            Principal principal
+    ) {
         model.addAttribute(
                 "librat",
                 libriRepository.gjejTeGjithe()
         );
 
+        model.addAttribute(
+                "email",
+                principal == null ? null : principal.getName()
+        );
+
         return "katalogu";
     }
+    
+        @GetMapping("/hyrja")
+        public String shfaqHyrjen() {
+            return "hyrja";
+        }
 }
