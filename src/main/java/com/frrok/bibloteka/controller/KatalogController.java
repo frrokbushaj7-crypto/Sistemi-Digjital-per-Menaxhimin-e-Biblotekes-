@@ -43,6 +43,16 @@ public class KatalogController {
 
             model.addAttribute("bibliotekar", bibliotekar);
 
+            boolean lexues = authentication != null
+                    && authentication.getAuthorities().stream()
+                            .anyMatch(autoritet ->
+                                    "ROLE_LEXUES".equals(
+                                            autoritet.getAuthority()
+                                    )
+                            );
+
+            model.addAttribute("lexues", lexues);
+
             return "katalogu";
         }
     

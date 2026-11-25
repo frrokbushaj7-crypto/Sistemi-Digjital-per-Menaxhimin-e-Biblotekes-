@@ -1,5 +1,9 @@
 package com.frrok.bibloteka.service;
 
+import java.util.List;
+
+import com.frrok.bibloteka.model.RezervimDetaje;
+
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -292,4 +296,85 @@ public class RezervimService {
                 afati
         );
     }
+
+    public List<RezervimDetaje> listoPerBibliotekarin(String email) {
+
+    Integer bibliotekare = jdbc.queryForObject(
+            """
+            SELECT COUNT(*)
+            FROM perdoruesit
+            WHERE email = ?
+              AND roli = 'BIBLIOTEKAR'
+            """,
+            Integer.class,
+            email
+    );
+
+    if (bibliotekare == null || bibliotekare == 0) {
+        throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "Vetëm bibliotekari mund t'i shohë të gjitha kërkesat."
+        );
+    }
+
+    String sql = """
+            SELECT r.rezervimi_id,
+                   p.email AS lexuesi_email,
+                   l.titulli,
+                   r.statusi,
+                   r.data_kerkeses,
+                   r.afati_marrjes
+            FROM rezervimet r
+            JOIN perdoruesit p
+                ON p.perdoruesi_id = r.lexuesi_id
+            JOIN librat l
+                ON l.libri_id = r.libri_id
+            ORDER BY r.data_kerkeses, r.rezervimi_id
+            """;
+
+    return jdbc.query(sql, (rs, rowNum) -> {
+        Timestamp afati = rs.getTimestamp("afati_marrjes");
+
+        return new RezervimDetaje(
+                rs.getInt("rezervimi_id"),
+                rs.getString("lexuesi_email"),
+                rs.getString("titulli"),
+                rs.getString("statusi"),
+                rs.getTimestamp("data_kerkeses").toLocalDateTime(),
+                afati == null ? null : afati.toLocalDateTime()
+        );
+    });
+}
+public List<RezervimDetaje> listoPerLexuesin(String email) {
+    String sql = """
+            SELECT r.rezervimi_id,
+                   p.email AS lexuesi_email,
+                   l.titulli,
+                   r.statusi,
+                   r.data_kerkeses,
+                   r.afati_marrjes
+            FROM rezervimet r
+            JOIN perdoruesit p
+                ON p.perdoruesi_id = r.lexuesi_id
+            JOIN librat l
+                ON l.libri_id = r.libri_id
+            WHERE p.email = ?
+              AND p.roli = 'LEXUES'
+            ORDER BY r.data_kerkeses DESC, r.rezervimi_id DESC
+            """;
+
+    return jdbc.query(sql, (rs, rowNum) -> {
+        Timestamp afati = rs.getTimestamp("afati_marrjes");
+
+        return new RezervimDetaje(
+                rs.getInt("rezervimi_id"),
+                rs.getString("lexuesi_email"),
+                rs.getString("titulli"),
+                rs.getString("statusi"),
+                rs.getTimestamp("data_kerkeses").toLocalDateTime(),
+                afati == null ? null : afati.toLocalDateTime()
+        );
+    }, email);
+}
+
 }

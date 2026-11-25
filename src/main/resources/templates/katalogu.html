@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalogu i bibliotekës</title>
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Katalogu i bibliotekës</title><script th:src="@{/js/rezervimet.js}" defer></script>
     <link rel="stylesheet" th:href="@{/css/katalogu.css}">
 </head>
 <body>
@@ -34,6 +36,18 @@
             <a th:href="@{/librat/shto}">Shto libër</a>
         </p>
 
+        <p th:if="${bibliotekar}">
+            <a th:href="@{/bibliotekari/rezervimet}">
+                Kërkesat për rezervim
+            </a>
+        </p>
+
+        <p th:if="${lexues}">
+            <a th:href="@{/lexuesi/rezervimet}">
+                Rezervimet e mia
+            </a>
+        </p>
+
         <p th:if="${#lists.isEmpty(librat)}">
             Aktualisht nuk ka libra në katalog.
         </p>
@@ -44,6 +58,7 @@
                     <th>Titulli</th>
                     <th>Përmbledhja</th>
                     <th>Gjuha</th>
+                    <th th:if="${lexues}">Rezervimi</th>
                 </tr>
             </thead>
 
@@ -52,9 +67,25 @@
                     <td th:text="${libri.titulli()}"></td>
                     <td th:text="${libri.permbledhja()}"></td>
                     <td th:text="${libri.gjuha()}"></td>
+
+                    <td th:if="${lexues}">
+                        <button
+                            type="button"
+                            class="kerko-rezervim"
+                            th:attr="data-libri-id=${libri.libriId()}"
+                            disabled>
+                            Kërko rezervim
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
+        <p
+            id="mesazhi-rezervimit"
+            th:if="${lexues}"
+            role="status"
+            aria-live="polite">
+        </p>
     </main>
 
 </body>

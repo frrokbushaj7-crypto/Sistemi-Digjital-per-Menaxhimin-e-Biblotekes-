@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="sq" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <title>Kërkesat për rezervim</title>
+    <script th:src="@{/js/miratimet.js}" defer></script>
+    <link rel="stylesheet" th:href="@{/css/katalogu.css}">
+</head>
+<body>
+
+    <header>
+        <h1>Biblioteka digjitale</h1>
+        <p>Menaxhimi i rezervimeve</p>
+    </header>
+
+    <main>
+        <h2>Kërkesat për rezervim</h2>
+
+        <p th:if="${#lists.isEmpty(rezervimet)}">
+            Aktualisht nuk ka kërkesa për rezervim.
+        </p>
+
+        <table th:unless="${#lists.isEmpty(rezervimet)}">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Lexuesi</th>
+                    <th>Libri</th>
+                    <th>Statusi</th>
+                    <th>Data e kërkesës</th>
+                    <th>Afati i marrjes</th>
+                    <th>Veprimi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="rezervimi : ${rezervimet}">
+                    <td th:text="${rezervimi.rezervimiId()}"></td>
+                    <td th:text="${rezervimi.lexuesiEmail()}"></td>
+                    <td th:text="${rezervimi.titulli()}"></td>
+
+                    <td
+                        class="statusi"
+                        th:text="${#strings.replace(
+                            rezervimi.statusi(), '_', ' '
+                        )}">
+                    </td>
+
+                    <td th:text="${#temporals.format(
+                        rezervimi.dataKerkeses(), 'dd.MM.yyyy HH:mm'
+                    )}"></td>
+
+                    <td
+                        class="afati-marrjes"
+                        th:text="${rezervimi.afatiMarrjes() == null
+                            ? 'Ende pa afat'
+                            : #temporals.format(
+                                rezervimi.afatiMarrjes(),
+                                'dd.MM.yyyy HH:mm'
+                            )}">
+                    </td>
+
+                    <td>
+                        <button
+                            th:if="${rezervimi.statusi() == 'NE_PRITJE'}"
+                            type="button"
+                            class="mirato-rezervimin"
+                            th:attr="data-rezervimi-id=${rezervimi.rezervimiId()}"
+                            disabled>
+                            Mirato
+                        </button>
+
+                        <span th:unless="${rezervimi.statusi() == 'NE_PRITJE'}">
+                            —
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p id="mesazhi-miratimit" role="status" aria-live="polite"></p>
+
+        <a th:href="@{/katalogu}">Kthehu te katalogu</a>
+    </main>
+
+</body>
+</html>

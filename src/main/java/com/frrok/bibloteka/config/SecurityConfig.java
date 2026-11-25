@@ -79,8 +79,13 @@ public class SecurityConfig {
                         "/api/librat/**"
                 ).hasRole("BIBLIOTEKAR")
 
-                .requestMatchers("/librat/**")
-                .hasRole("BIBLIOTEKAR")
+                .requestMatchers(
+                        "/librat/**",
+                        "/bibliotekari/**"
+                ).hasRole("BIBLIOTEKAR")
+
+                .requestMatchers("/lexuesi/**")
+                .hasRole("LEXUES")
 
                 .anyRequest().authenticated()
         );

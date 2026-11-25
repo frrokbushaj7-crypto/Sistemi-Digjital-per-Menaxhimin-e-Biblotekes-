@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="sq" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rezervimet e mia</title>
+
+    <link rel="stylesheet" th:href="@{/css/katalogu.css}">
+</head>
+<body>
+
+    <header>
+        <h1>Biblioteka digjitale</h1>
+        <p>Rezervimet e mia</p>
+    </header>
+
+    <main>
+        <h2>Kërkesat dhe rezervimet e mia</h2>
+
+        <p>
+            Pas miratimit, ke 48 orë për ta marrë librin.
+            Afati i marrjes shfaqet në tabelë.
+        </p>
+
+        <p th:if="${#lists.isEmpty(rezervimet)}">
+            Ende nuk ke bërë ndonjë kërkesë për rezervim.
+        </p>
+
+        <table th:unless="${#lists.isEmpty(rezervimet)}">
+            <thead>
+                <tr>
+                    <th>Libri</th>
+                    <th>Statusi</th>
+                    <th>Data e kërkesës</th>
+                    <th>Afati i marrjes</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="rezervimi : ${rezervimet}">
+                    <td th:text="${rezervimi.titulli()}"></td>
+
+                    <td th:text="${#strings.replace(
+                        rezervimi.statusi(), '_', ' '
+                    )}"></td>
+
+                    <td th:text="${#temporals.format(
+                        rezervimi.dataKerkeses(), 'dd.MM.yyyy HH:mm'
+                    )}"></td>
+
+                    <td th:text="${rezervimi.afatiMarrjes() == null
+                        ? 'Ende pa afat'
+                        : #temporals.format(
+                            rezervimi.afatiMarrjes(),
+                            'dd.MM.yyyy HH:mm'
+                        )}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>
+            <a th:href="@{/lexuesi/rezervimet}">Përditëso listën</a>
+        </p>
+
+        <a th:href="@{/katalogu}">Kthehu te katalogu</a>
+    </main>
+
+</body>
+</html>
