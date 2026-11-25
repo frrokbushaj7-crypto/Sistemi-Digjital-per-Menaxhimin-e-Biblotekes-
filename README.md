@@ -5,34 +5,47 @@ Projekt individual për lëndën **Projekt – Praktikë Profesionale**.
 **Studenti:** Frrok Bushaj  
 **Profesori:** Prof. Ass. Dr. Endrit Fetahi
 
-## Gjendja aktuale — Raporti Teknik 2
+## Gjendja aktuale — Raporti Teknik 3
 
-Është krijuar databaza reale dhe lidhja e saj me Spring Boot.
-API-ja mbështet listimin dhe shtimin e librave, kërkimin sipas ID-së,
-kërkesën për rezervim, miratimin nga bibliotekari dhe skadimin automatik.
-Janë provuar validimi i input-it, autentikimi dhe kufizimet sipas rolit.
+Është zhvilluar ndërfaqja web me HTML, CSS, JavaScript dhe Thymeleaf,
+e lidhur me backend-in Spring Boot dhe databazën MariaDB.
 
-Procesi kryesor është: lexuesi me abonim aktiv paraqet kërkesën;
-bibliotekari e miraton; sistemi cakton një kopje të disponueshme dhe
-afatin 48-orësh. Detyra periodike kontrollon çdo minutë rezervimet e
-skaduara dhe liron kopjet përkatëse. Gjatë miratimit përdoren transaksione
-dhe bllokim i rreshtave në databazë.
+Funksionet e realizuara përmes ndërfaqes janë:
 
-Ndërfaqja web ende nuk është ndërtuar. Tabela `huazimet` ekziston,
-por dorëzimi dhe kthimi ende nuk kanë endpoint-e. Regjistrimi publik,
-emaili real i verifikimit, gjobat dhe kontrolli i tyre, pagesat, materialet
-digjitale, shitjet, donacionet dhe backup-i automatik mbeten për fazat e tjera.
-Përditësimi/fshirja e librave dhe kërkimi tekstual ende nuk janë implementuar.
+- Shfletimi publik i katalogut të librave.
+- Hyrja dhe dalja nga llogaria.
+- Shtimi i librave nga bibliotekari.
+- Kërkesa për rezervim nga lexuesi me abonim aktiv.
+- Shfaqja dhe miratimi i kërkesave nga bibliotekari.
+- Shfaqja e rezervimeve personale, statusit dhe afatit të marrjes.
+
+Janë përmirësuar formularët, butonat dhe navigimi.
+Statuset e rezervimeve dallohen me ngjyra.
+
+Pas miratimit, sistemi cakton një kopje të disponueshme dhe afatin
+48-orësh për marrjen e librit. Rezervimet që skadojnë kontrollohen
+automatikisht dhe kopjet përkatëse lirohen. Miratimi përdor
+transaksione dhe bllokim të rreshtave në databazë.
+
+API-ja mbështet gjithashtu kërkimin e librit sipas ID-së.
+Validimi dhe kontrolli i të drejtave zbatohen në backend.
+
+Për fazat e ardhshme mbeten regjistrimi publik dhe verifikimi real
+me email, menaxhimi i marrjes dhe kthimit të librave, zgjatjet,
+gjobat, njoftimet, pagesat, materialet digjitale, shitjet,
+donacionet dhe backup-i automatik. Përditësimi/fshirja e librave
+dhe kërkimi tekstual ende nuk janë implementuar.
 
 ## Teknologjitë
 
 - Java 25 dhe Spring Boot 4.1.1.
 - MariaDB 10.4.32 nga XAMPP; databaza quhet `bibloteka`.
 - Spring JDBC dhe `JdbcTemplate` për kërkesat SQL.
-- Spring Security për HTTP Basic, rolet, BCrypt dhe CSRF.
+- Spring Security për hyrjen përmes formularit, sesionet, HTTP Basic, rolet, BCrypt dhe mbrojtjen CSRF.
 - Jakarta Validation për kontrollin e input-it.
 - Maven për varësitë dhe përpilimin; Git/GitHub për versionimin.
-- Thymeleaf është përfshirë si varësi; HTML, CSS dhe JavaScript do të përdoren për ndërfaqen.
+- Thymeleaf për shfaqjen e të dhënave dinamike në faqet HTML.
+- HTML, CSS dhe JavaScript për ndërtimin dhe ndërveprimin e ndërfaqes.
 
 Në Raportin 1 ishte planifikuar MySQL. Implementimi lokal përdor MariaDB,
 serverin e përfshirë në XAMPP.
@@ -92,9 +105,20 @@ Ky skedar përgatit paketën bazë, kopjen `LIB-0001` të librit 1 dhe një
 abonim aktiv testues për lexuesin. Abonimi aktivizohet manualisht,
 pa kryer pagesë reale. Komandat shmangin dyfishimin gjatë përsëritjes.
 
-Aplikacioni punon në **http://localhost:8080**. Për katalogun hapni
-**http://localhost:8080/api/librat**. Faqja kryesore `/` ende nuk ka ndërfaqe.
-Për ndalje përdorni **Ctrl + C** dhe, nëse pyet terminali, përgjigjuni `Y`.
+Aplikacioni punon në http://localhost:8080.
+
+Faqet kryesore janë:
+
+- `/` ose `/katalogu` — katalogu publik.
+- `/hyrja` — hyrja në llogari.
+- `/librat/shto` — shtimi i librit nga bibliotekari.
+- `/bibliotekari/rezervimet` — menaxhimi i rezervimeve.
+- `/lexuesi/rezervimet` — rezervimet personale të lexuesit.
+
+Endpoint-i `/api/librat` kthen listën e librave në format JSON.
+
+Për ndalje përdorni Ctrl + C dhe, nëse pyet terminali,
+përgjigjuni `Y`.
 
 ## Endpoint-et
 
@@ -126,10 +150,13 @@ Shembull për `POST /api/rezervimet`:
 ID-ja e lexuesit merret nga përdoruesi i autentikuar, jo nga trupi JSON.
 Për miratim përdorni ID-në e kthyer nga krijimi i rezervimit.
 
-Kërkesat POST dërgojnë HTTP Basic, tokenin CSRF dhe të njëjtin sesion
-ku u mor tokeni nga `/api/csrf`. `headerName` i përgjigjes përcakton
-header-in që duhet dërguar. Pas rinisjes së aplikacionit merret token i ri.
-Roli i gabuar ose CSRF i pavlefshëm mund të japin 403.
+Ndërfaqja përdor sesionin e krijuar pas hyrjes përmes formularit.
+Për testimin e API-së mbështetet edhe autentikimi HTTP Basic.
+
+Kërkesat POST kërkojnë tokenin CSRF dhe sesionin përkatës.
+Gjatë testimit me PowerShell, tokeni merret nga `/api/csrf`.
+Fusha `headerName` përcakton emrin e header-it që duhet dërguar.
+Roli i gabuar ose tokeni CSRF i pavlefshëm mund të japin 403.
 
 ## Testimi i kryer
 
@@ -151,5 +178,6 @@ Ende nuk janë kryer teste ngarkese me shumë klientë njëkohësisht.
 
 - [Raporti Teknik 1 në Word](Dokumenti%20Word.docx)
 - [Raporti Teknik 2 në Word](Raporti_Teknik_2.docx)
+- [Raporti Teknik 3 në Word](Raporti_Teknik_3.docx)
 - [Skema SQL dhe librat fillestarë](database/bibloteka.sql)
 - [Të dhënat ndihmëse demo](database/demo.sql)
