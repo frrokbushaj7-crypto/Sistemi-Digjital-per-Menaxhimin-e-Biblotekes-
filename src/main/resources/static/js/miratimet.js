@@ -62,6 +62,9 @@ butonat.forEach((butoni) => {
             rreshti.querySelector(".statusi").textContent =
                 rezervimi.statusi;
 
+            rreshti.querySelector(".statusi").dataset.status =
+                rezervimi.statusi;
+                
             rreshti.querySelector(".afati-marrjes").textContent =
                 new Date(rezervimi.afatiMarrjes).toLocaleString("sq-AL");
 

@@ -41,9 +41,13 @@
                 <tr th:each="rezervimi : ${rezervimet}">
                     <td th:text="${rezervimi.titulli()}"></td>
 
-                    <td th:text="${#strings.replace(
-                        rezervimi.statusi(), '_', ' '
-                    )}"></td>
+                    <td
+                        class="statusi"
+                        th:attr="data-status=${rezervimi.statusi()}"
+                        th:text="${#strings.replace(
+                            rezervimi.statusi(), '_', ' '
+                        )}">
+                    </td>
 
                     <td th:text="${#temporals.format(
                         rezervimi.dataKerkeses(), 'dd.MM.yyyy HH:mm'

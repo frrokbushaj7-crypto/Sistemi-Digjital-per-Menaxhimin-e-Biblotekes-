@@ -91,3 +91,134 @@ tbody tr:hover {
         padding: 12px;
     }
 }
+
+/* Formularët */
+main form {
+    max-width: 600px;
+}
+
+main form > div {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input:not([type="hidden"]),
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #9aaa9f;
+    border-radius: 6px;
+    font: inherit;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #234b3b;
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+    background: #17392b;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.statusi {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.statusi[data-status="NE_PRITJE"] {
+    color: #754400;
+    background: #fff4d6;
+}
+
+.statusi[data-status="MIRATUAR"] {
+    color: #205333;
+    background: #e8f4eb;
+}
+
+.statusi[data-status="SKADUAR"] {
+    color: #7d3030;
+    background: #fbecec;
+}
+
+/* Lidhjet që përdoren si butona */
+main > p > a,
+main > a,
+header > p > a {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 6px;
+    background: #234b3b;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+}
+
+main > p > a:hover,
+main > a:hover {
+    background: #17392b;
+}
+
+/* Lidhja e hyrjes brenda kreut */
+header > p > a {
+    background: white;
+    color: #234b3b;
+}
+
+/* Emaili dhe butoni Dil në të njëjtin rresht */
+header > div {
+    max-width: 1100px;
+    margin: 20px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+header > div > p {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+header > div > form {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+header > div button {
+    background: white;
+    color: #234b3b;
+}
+
+header > div button:hover:not(:disabled) {
+    background: #e3eee7;
+}
+
+/* Butonat e navigimit në telefon */
+@media (max-width: 600px) {
+    main > p > a,
+    main > a {
+        width: 100%;
+    }
+}

@@ -46,6 +46,7 @@
 
                     <td
                         class="statusi"
+                        th:attr="data-status=${rezervimi.statusi()}"
                         th:text="${#strings.replace(
                             rezervimi.statusi(), '_', ' '
                         )}">
